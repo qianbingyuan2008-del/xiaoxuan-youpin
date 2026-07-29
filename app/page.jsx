@@ -172,6 +172,8 @@ export default function Home() {
   const [faqOpen, setFaqOpen] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [isWeChat, setIsWeChat] = useState(false);
 
   const currentPlan = useMemo(() => packageMatrix[activeSet], [activeSet]);
 
@@ -186,6 +188,10 @@ export default function Home() {
       document.body.style.overflow = "";
     };
   }, [viewer]);
+
+  useEffect(() => {
+    setIsWeChat(/MicroMessenger/i.test(window.navigator.userAgent));
+  }, []);
 
   function goTo(selector) {
     setMenuOpen(false);
@@ -202,8 +208,45 @@ export default function Home() {
     }
   }
 
+  async function copyPageLink() {
+    const pageLink = window.location.href;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(pageLink);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = pageLink;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+      }
+      setLinkCopied(true);
+      window.setTimeout(() => setLinkCopied(false), 1800);
+    } catch {
+      setLinkCopied(false);
+    }
+  }
+
   return (
     <main>
+      {isWeChat && (
+        <aside className="wechat-access-note" aria-label="微信访问提示">
+          <div className="shell">
+            <div className="wechat-access-copy">
+              <strong>微信访问提示</strong>
+              <span>若图片加载缓慢或页面空白，请点右上角“···”，选择“在浏览器打开”。</span>
+            </div>
+            <button type="button" onClick={copyPageLink}>
+              {linkCopied ? "已复制" : "复制网址"}
+            </button>
+          </div>
+        </aside>
+      )}
+
       <div className="notice-bar">
         <div className="shell notice-inner">
           <span className="notice-label">2026 新生季预订</span>

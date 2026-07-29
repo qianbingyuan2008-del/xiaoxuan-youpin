@@ -2,7 +2,12 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#0aa8b8" />
     <meta
       name="description"
@@ -21,6 +26,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding:24px;font-family:system-ui,sans-serif;line-height:1.7">
+        当前浏览器未启用 JavaScript。请在微信右上角菜单中选择“在浏览器打开”。
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
+    <script nomodule>
+      document.body.innerHTML =
+        '<div style="padding:24px;font-family:system-ui,sans-serif;line-height:1.7"><h2>浏览器版本过旧</h2><p>请升级微信，或点击右上角菜单并选择“在浏览器打开”。</p><p>咨询电话：15730058405</p></div>';
+    </script>
   </body>
 </html>
